@@ -4,49 +4,123 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class PlayerController : MonoBehaviour
-{
+{   
+    //Public behaviour variables
+    public float speed;
+    public float jumpForce;
+
+    //Jump variables
+    public LayerMask _layerMask;
+    public Transform _floorPoint;
+    private bool isGrounded;
+    public float circleRatius;
+    
+    //Move variables
     private Rigidbody2D _rigidBody;
     private Animator _animator;
     private bool facingRight = true;
-
     private Vector2 direction;
-    public float speed;
+
+    //Attacking variables
+    private bool isAttacking = false;
+
+    //IdleLong variables
+    public float idleLongTime;
+    private float idleLongTimer;
 
     private void Awake()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        direction = Vector2.zero;    
     }
 
-    // Update is called once per frame
     void Update()
     {
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        direction = new Vector2(horizontalInput, 0); 
-
-        if(facingRight == true && horizontalInput < 0)
-        {
-            Flip();
-        }
-        else if(facingRight == false && horizontalInput > 0){
-            Flip();
-        }
+        idleLongAnimation();
+        characterMovement();
+        
+        
     }
 
     private void FixedUpdate()
     {
-        float horizontalVelocity = direction.normalized.x * speed;
-        _rigidBody.linearVelocity = new Vector2(horizontalVelocity, _rigidBody.linearVelocity.y);
+        if (isAttacking == false)
+        {
+            float horizontalVelocity = direction.normalized.x * speed;
+            _rigidBody.linearVelocity = new Vector2(horizontalVelocity, _rigidBody.linearVelocity.y);
+        }
     }
 
     private void LateUpdate()
     {
-        _animator.SetBool("Idle", direction == Vector2.zero);
+        _animator.SetBool("Idle", direction == Vector2.zero && isGrounded && isAttacking == false);
+        _animator.SetBool("IsGrounded", isGrounded);
+        _animator.SetFloat("VerticalVelocity", _rigidBody.linearVelocity.y);
+
+        
+    }
+
+    private void idleLongAnimation()
+    {
+        if (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Idle"))
+        {
+            idleLongTimer += Time.deltaTime;
+            if(idleLongTimer > idleLongTime)
+            {
+                _animator.SetTrigger("LongIdle");
+                idleLongTimer = 0;
+            }
+        }
+        else
+        {
+            idleLongTimer = 0;
+        }
+    }
+    private void characterMovement()
+    {
+        isGrounded = Physics2D.OverlapCircle(_floorPoint.position, circleRatius, _layerMask);
+
+        if (_animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
+        {
+            isAttacking = true;
+        }
+        else
+        {
+            isAttacking = false;
+        }
+
+        if (Input.GetButtonDown("Fire1") && isGrounded && isAttacking == false)
+        {
+            _rigidBody.linearVelocity = Vector2.zero;
+            _animator.SetBool("Idle", false);
+            _animator.ResetTrigger("Attack");
+            _animator.SetTrigger("Attack");
+        }
+
+        if (isAttacking == false)
+        {
+            float horizontalInput = Input.GetAxisRaw("Horizontal");
+            direction = new Vector2(horizontalInput, 0);
+
+            if (facingRight == true && horizontalInput < 0)
+            {
+                Flip();
+            }
+            else if (facingRight == false && horizontalInput > 0)
+            {
+                Flip();
+            }
+
+            if (Input.GetButtonDown("Jump") && isGrounded)
+            {
+                _rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+                _animator.SetTrigger("Jump");
+            }
+        }
     }
 
     private void Flip()
