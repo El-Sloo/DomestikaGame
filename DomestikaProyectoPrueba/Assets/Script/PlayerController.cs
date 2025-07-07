@@ -72,7 +72,6 @@ public class PlayerController : MonoBehaviour
             if(idleLongTimer > idleLongTime)
             {
                 _animator.SetTrigger("LongIdle");
-                idleLongTimer = 0;
             }
         }
         else
@@ -101,7 +100,11 @@ public class PlayerController : MonoBehaviour
             _animator.SetTrigger("Attack");
         }
 
-        if (isAttacking == false)
+        if (isAttacking == true)
+        {
+            _rigidBody.linearVelocity = Vector2.zero;
+        }
+        else
         {
             float horizontalInput = Input.GetAxisRaw("Horizontal");
             direction = new Vector2(horizontalInput, 0);
