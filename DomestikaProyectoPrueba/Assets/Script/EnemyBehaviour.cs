@@ -23,12 +23,15 @@ public class EnemyBehaviour : MonoBehaviour
     //Public behaviour variables
     public float velocity;
     public float distanceToWall;
+    public int shootingTime;
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _weapon = GetComponentInChildren<Weapon>();
         _rigidBody = GetComponent<Rigidbody2D>();
+
+        Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer, true);
     }   
 
     void Update()
@@ -78,7 +81,7 @@ public class EnemyBehaviour : MonoBehaviour
         _rigidBody.linearVelocity = Vector2.zero;
         yield return new WaitForSeconds(1);
         _animator.SetTrigger("Shoot");
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(shootingTime);
 
         isAttacking = false;
 
