@@ -1,7 +1,5 @@
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.Tilemaps;
+
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public class PlayerController : MonoBehaviour
 {   

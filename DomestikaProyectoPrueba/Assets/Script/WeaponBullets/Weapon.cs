@@ -10,20 +10,16 @@ public class Weapon : MonoBehaviour
     public LineRenderer lineRenderer;
 
     private Transform firePoint;
+
+    private Vector3 initialLocalPosition;
+    private Quaternion initialLocalRotation;
     private void Awake()
     {
         firePoint = transform.Find("FirePoint");
+        initialLocalPosition = transform.localPosition;
+        initialLocalRotation = transform.localRotation;
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
 
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void shoot()
     {
         if(bulletPrefab != null && firePoint != null && shooter != null)
@@ -63,5 +59,10 @@ public class Weapon : MonoBehaviour
             lineRenderer.enabled = false;
         }
 
+    }
+    private void OnEnable()
+    {
+        transform.localPosition = initialLocalPosition;
+        transform.localRotation = initialLocalRotation;
     }
 }

@@ -7,17 +7,25 @@ public class Bullet : MonoBehaviour
     public float livingTime = 3f;
     private SpriteRenderer _renderer;
     private Rigidbody2D _rigidBody;
+    private Collider2D _collider;
     public Color initialColor = Color.white;
     public Color finalColor;
     private float _startingTime;
     public int damage;
+    private bool isReturned;
+    private bool hasCollisioned;
 
     void Awake()
     {
+        int hitLayer = LayerMask.NameToLayer("Hit");
+        int hurtLayer = LayerMask.NameToLayer("Hurt");
+        int enemyLayer = LayerMask.NameToLayer("Enemy");
+
         _renderer = this.GetComponent<SpriteRenderer>();
         _rigidBody = this.GetComponent<Rigidbody2D>();
+        _collider = this.GetComponent<Collider2D>();
 
-        Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer, true);
+
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -36,15 +44,35 @@ public class Bullet : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rigidBody.linearVelocity = new Vector2(speed * direction.x, _rigidBody.linearVelocityY);
+        _rigidBody.linearVelocity = direction * speed;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (!hasCollisioned)
         {
-            collision.SendMessageUpwards("AddDamage", damage);
-            Destroy(this.gameObject);
+            if (isReturned && collision.CompareTag("Enemy"))
+            {
+
+                collision.SendMessageUpwards("AddDamage", damage);
+                Destroy(this.gameObject);
+                hasCollisioned = true;
+
+            }
+            if (collision.CompareTag("Player"))
+            {
+                collision.SendMessageUpwards("AddDamage", damage);
+                Destroy(this.gameObject);
+                hasCollisioned = true;
+            }
         }
+
+        
+        
+    }
+    private void AddDamage()
+    {
+        direction = -1 * direction;
+        isReturned = true;
     }
 }

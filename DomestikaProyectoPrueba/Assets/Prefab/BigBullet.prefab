@@ -1,5 +1,73 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5609039730083953222
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8826064997948499504}
+  - component: {fileID: 1217411306500830130}
+  m_Layer: 8
+  m_Name: HurtBox
+  m_TagString: BigBullet
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8826064997948499504
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5609039730083953222}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2468269845238921239}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &1217411306500830130
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5609039730083953222}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.00887531, y: 0}
+  m_Radius: 0.10061103
 --- !u!1 &6174598666908075157
 GameObject:
   m_ObjectHideFlags: 0
@@ -13,9 +81,9 @@ GameObject:
   - component: {fileID: 1711159283544970797}
   - component: {fileID: -2618779311849839808}
   - component: {fileID: 6378915521379620466}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: BigBullet
-  m_TagString: Untagged
+  m_TagString: BigBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,7 +100,8 @@ Transform:
   m_LocalPosition: {x: 0.297, y: -1.044, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8826064997948499504}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1585700852967323775
@@ -105,11 +174,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3799bf5992764b44b33162b8015c159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2.25
+  speed: 1.75
   direction: {x: 1, y: 0}
   livingTime: 2
   initialColor: {r: 1, g: 1, b: 1, a: 1}
   finalColor: {r: 1, g: 0, b: 0, a: 0.94509804}
+  damage: 1
 --- !u!58 &-2618779311849839808
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -144,8 +214,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.005203545, y: 0}
-  m_Radius: 0.1081298
+  m_Offset: {x: -0.008908883, y: 0}
+  m_Radius: 0.10071908
 --- !u!50 &6378915521379620466
 Rigidbody2D:
   serializedVersion: 5
